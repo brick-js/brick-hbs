@@ -1,0 +1,25 @@
+{
+  "name": "brick-hbs",
+  "version": "1.0.0",
+  "description": "handlebars wrapper for brick.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harttle/brick-hbs.git"
+  },
+  "author": "harttle",
+  "homepage": "https://github.com/harttle/brick-hbs#readme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harttle/brick-hbs/issues"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "lodash": "^3.10.1",
+    "handlebars": "^4.0.5",
+    "handlebars-async": "0.0.3"
+  }
+}
