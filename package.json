@@ -1,7 +1,7 @@
 {
   "name": "brick-hbs",
-  "version": "1.0.1",
-  "description": "handlebars wrapper for brick.js",
+  "version": "1.0.2",
+  "description": "Handlebars Template Engine for Brick.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,7 +1,18 @@
 
-Handlebars wrapper for [Brick.js][brk].
+Handlebars Template Engine for [Brick.js][brk].
 
-# Quick Start
+## Run the Demo
+
+`demo/` directory contains a demo project. Run the demo:
+
+```bash
+git clone git@github.com:harttle/brick-hbs.git
+cd brick-hbs && npm install
+cd demo && npm install
+grunt
+```
+
+Open http://localhost:3000 in your browser!
 
 ## Installation
 
@@ -13,20 +24,19 @@ npm install -S brick-hbs
 
 ```javascript
 var brickJs = require('brick.js');
-var hbs = require('brick-hbs');
+var Hbs = require('brick-hbs');
 
 var brk = brickJs({
     root: path.join(__dirname, 'modules'),
-    render: app.render.bind(app),
-    engine: hbs.brick({
-        cache: false
+    engine: Hbs.brick({
+        cache: false    // disabled by default, see below
     })
 });
 
 app.use('/', brk.express);
 ```
 
-# Include Partials/Modules
+## Include Partials/Modules
 
 In Brick.js, partials are organized as modules. Eg:
 
@@ -58,7 +68,7 @@ The HTML for `home` page will be rendered as:
 </html>
 ```
 
-# Layout Extend 
+## Layout Extend 
 
 Brick-hbs implemented async helper internaly, to support layout extend. Eg: 
 
@@ -91,12 +101,39 @@ The HTML for `home` page will be rendered as:
 </html>
 ```
 
-# Options
+## Options
 
-## cache
+### cache
+
+Type: `Bool`
 
 Default: `false`
 
-If set to `true`, all templates will be loaded only once (for production usage).
+If set to `true`, all templates will be loaded only once (for production usage). Otherwise, template file will be reloaded on every HTTP request.
+
+## Register New Helper
+
+Above declared `Hbs` object is compatible with [Handlebars][Handlebars].
+
+Javascript:
+
+```javascript
+Hbs.registerHelper('upperCase', function(content) {
+    return content.toUpperCase();
+});
+```
+
+Template:
+
+```handlebars
+<h3>{{upperCase 'alice'}}</h3>
+```
+
+Will be rendered as:
+ 
+```html
+<h3>ALICE</h3>
+```
 
 [brk]: https://github.com/harttle/brick-hbs
+[Handlebars]: http://handlebarsjs.com/
