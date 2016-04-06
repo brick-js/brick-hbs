@@ -32,7 +32,7 @@ describe('extend tag', function() {
             .should.eventually.equal('\n' + '<p>harttle</p>\n' + 'layoutharttle');
     });
     it('should pass string hash context to parent', function() {
-        var pctrl = (mid, ctx) => Promise.resolve('hbs-pending-block' + mid + ctx.name);
+        var pctrl = (mid, ctx) => Promise.resolve('hbs-pending-block' + mid + ctx.title);
         return hbs.render(path('about.hbs'), ctx, pctrl)
             .should.eventually.equal('\n<p>harttle</p>\nlayoutharttle');
     });
