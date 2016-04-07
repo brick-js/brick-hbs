@@ -16,26 +16,21 @@ describe('extend tag', function() {
     var hbs = Hbs();
     var ctx = {name: 'harttle'};
 
-    it('should handle extend tag', function() {
-        var layout = 'before' + 'hbs-pending-block' + 'after';
-        return hbs.render(path('home.hbs'), ctx, c => Promise.resolve(layout))
-            .should.eventually.equal('before\n' + '<p>harttle</p>\n' + 'after');
-    });
     it('should pass context to parent', function() {
-        var pctrl = (mid, c) => Promise.resolve('hbs-pending-block' + mid + c.name);
-        return hbs.render(path('home.hbs'), ctx, pctrl)
-            .should.eventually.equal('\n' + '<p>harttle</p>\n' + 'layoutharttle');
+        return hbs.render(path('home.hbs'), ctx, render)
+            .should.eventually.equal('harttle\n<p>harttle</p>\n\n');
     });
     it('should pass hash context to parent', function() {
-        var pctrl = (mid, c) => Promise.resolve('hbs-pending-block' + mid + c.title);
-        return hbs.render(path('account.hbs'), ctx, pctrl)
-            .should.eventually.equal('\n' + '<p>harttle</p>\n' + 'layoutharttle');
+        return hbs.render(path('account.hbs'), ctx, render)
+            .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
     it('should pass string hash context to parent', function() {
-        var pctrl = (mid, ctx) => Promise.resolve('hbs-pending-block' + mid + ctx.title);
-        return hbs.render(path('about.hbs'), ctx, pctrl)
-            .should.eventually.equal('\n<p>harttle</p>\nlayoutharttle');
+        return hbs.render(path('about.hbs'), ctx, render)
+            .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
+    function render(mid, ctx){
+        return hbs.render(path(`${mid}.hbs`), ctx, render);
+    }
 });
 
 function path(p) {

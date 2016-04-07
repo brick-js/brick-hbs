@@ -13,33 +13,28 @@ Object.defineProperty(
 
 describe('include tag', function() {
     var root = Path.resolve(__dirname, '../cases'),
-        hbs = Hbs();
+        hbs = Hbs(),
+        user = { name: 'harttle' };
 
     it('should handle include tag', function() {
         return hbs.render(path('navbar.hbs'), {}, c => Promise.resolve('user'))
             .should.eventually.equal('before' + 'user' + 'after\n');
     });
     it('should inherit parent context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return hbs.render(path('navbar.hbs'), {
-                name: 'harttle'
-            }, pctrl)
-            .should.eventually.equal('before' + 'user,harttle' + 'after\n');
+        return hbs.render(path('navbar.hbs'), user, render)
+            .should.eventually.equal('before<p>harttle</p>\nafter\n');
     });
     it('should accept hash context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return hbs.render(path('user-list.hbs'), {
-                user: {
-                    name: 'harttle'
-                }
-            }, pctrl)
-            .should.eventually.equal('user,harttle\n');
+        return hbs.render(path('user-list.hbs'), { user: user}, render)
+            .should.eventually.equal('<p>harttle</p>\n\n');
     });
     it('should accept string hash context', function() {
-        var pctrl = (mid, ctx) => Promise.resolve(mid + ',' + ctx.name);
-        return hbs.render(path('user-array.hbs'), {}, pctrl)
-            .should.eventually.equal('user,harttle\n');
+        return hbs.render(path('user-array.hbs'), {}, render)
+            .should.eventually.equal('<p>harttle</p>\n\n');
     });
+    function render(mid, ctx){
+        return hbs.render(path(`${mid}.hbs`), ctx, render);
+    }
 });
 
 function path(p) {

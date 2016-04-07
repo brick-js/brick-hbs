@@ -7,17 +7,17 @@ var defaultOptions = {
     cache: false,
 };
 
-function BrickHbs(pctrl) {
+function Slug(pctrl) {
     this.pctrl = pctrl;
     this.children = [];
     this.parent = undefined;
 }
 
-BrickHbs.prototype.pending = function() {
-    var pendingTable = {};
+Slug.prototype.pending = function() {
+    var linkTable = {};
     return Promise.all(this.children).then(results => {
-        results.forEach(info => pendingTable[info.id] = info.html);
-        return pendingTable;
+        results.forEach(info => linkTable[info.id] = info.html);
+        return linkTable;
     });
 };
 
@@ -28,13 +28,20 @@ function Brick(config) {
 
 Brick.prototype.render = function(tplPath, ctx, pctrl) {
     ctx = ctx || {};
-    if(typeof ctx !== 'object'){
+    if (typeof ctx !== 'object') {
         var msg = 'context is expected to be an object, encountered: ' + ctx;
-        debug(msg);
         throw new Error(msg);
     }
-    ctx.brkhbs = new BrickHbs(pctrl);
-    return this.getTpl(tplPath).then(tpl => link(tpl, ctx));
+    ctx.slug = new Slug(pctrl);
+    return this.getTpl(tplPath)
+        .then(tpl => link(tpl, ctx))
+        .then(html => {
+            var parent = ctx.slug.parent;
+            if (parent) {
+                parent.ctx.block = html;
+                return pctrl(parent.mid, parent.ctx);
+            } else return html;
+        });
 };
 
 Brick.prototype.getTpl = function(tplPath) {
@@ -42,7 +49,7 @@ Brick.prototype.getTpl = function(tplPath) {
         var tpl = this.cache[tplPath];
         if (tpl) return Promise.resolve(tpl);
     }
-    return readFile(tplPath)
+    return src(tplPath)
         .then(src => Handlebars.compile(src))
         .then(tpl => this.cache[tplPath] = tpl);
 };
@@ -53,13 +60,13 @@ Handlebars.registerHelper('include', function(mid, context, options) {
         context = null;
     }
     context = _.merge({}, this, context, options.hash);
-    var brkhbs = options.data.root.brkhbs,
+    var slug = options.data.root.slug,
         id = uuid(),
-        p = brkhbs.pctrl(mid, context).then(html => ({
+        p = slug.pctrl(mid, context).then(html => ({
             id, html
         }));
-    brkhbs.children.push(p);
-    return `hbs-pending-${id}`;
+    slug.children.push(p);
+    return `placeholder-${id}`;
 });
 
 Handlebars.registerHelper('extend', function(mid, context, options) {
@@ -67,34 +74,28 @@ Handlebars.registerHelper('extend', function(mid, context, options) {
         options = context;
         context = null;
     }
-    context = _.merge({}, this, context, options.hash);
-    var brkhbs = options.data.root.brkhbs;
-    brkhbs.parent = brkhbs.pctrl(mid, context);
+    var ctx = _.merge({}, this, context, options.hash);
+    var slug = options.data.root.slug;
+    slug.parent = {
+        mid, ctx
+    };
     return '';
 });
 
-Handlebars.registerHelper('block', function() {
-    return 'hbs-pending-block';
-});
+function link(tpl, ctx) {
+    var html = tpl(ctx),
+        hbs = ctx.slug;
+    return hbs.pending()
+        .then(lktbl =>
+            html.replace(/placeholder-(\d+)/g, (expr, name) => lktbl[name] || expr));
+}
 
-function readFile(file) {
+function src(file) {
     return new Promise(function(resolve, reject) {
         fs.readFile(file, 'utf8', function(e, data) {
             return e ? reject(e) : resolve(data);
         });
     });
-}
-
-function link(tpl, ctx) {
-    var html = tpl(ctx),
-        hbs = ctx.brkhbs;
-    return hbs.pending()
-        .then(lktbl =>
-            html.replace(/hbs-pending-(\d+)/g, (expr, name) => lktbl[name]))
-        .then(html => hbs.parent ?
-            hbs.parent.then(phtml => phtml.replace('hbs-pending-block', html)) :
-            html
-        );
 }
 
 function uuid() {
@@ -103,4 +104,3 @@ function uuid() {
 
 Handlebars.brick = config => new Brick(_.defaults(config || {}, defaultOptions));
 module.exports = Handlebars;
-

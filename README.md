@@ -78,10 +78,12 @@ File `layout1/index.html` in module `layout1`:
 <html>
 <title>Common Title</title>
 <body>
-  {{block}}
+  {{{block}}}
 </body>
 </html>
 ```
+
+> Use `{{block}}` for escaping.
 
 File `home/index.hbs` in module `home`:
 
