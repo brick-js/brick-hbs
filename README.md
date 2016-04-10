@@ -9,7 +9,7 @@ Handlebars Template Engine for [Brick.js][brk].
 `demo/` directory contains a demo project. Run the demo:
 
 ```bash
-git clone git@github.com:harttle/brick-hbs.git
+git clone git@github.com:brick-js/brick-hbs.git
 cd brick-hbs && npm install
 cd demo && npm install
 grunt
@@ -140,5 +140,5 @@ Will be rendered as:
 <h3>ALICE</h3>
 ```
 
-[brk]: https://github.com/harttle/brick-hbs
+[brk]: https://github.com/brick-js/brick-hbs
 [Handlebars]: http://handlebarsjs.com/
