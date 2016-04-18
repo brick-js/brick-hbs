@@ -1,5 +1,6 @@
 [![NPM version](https://img.shields.io/npm/v/brick-hbs.svg?style=flat)](https://www.npmjs.org/package/brick-hbs)
 [![Build Status](https://travis-ci.org/brick-js/brick-hbs.svg?branch=master)](https://travis-ci.org/brick-js/brick-hbs)
+[![Coverage Status](https://coveralls.io/repos/github/brick-js/brick-hbs/badge.svg?branch=master)](https://coveralls.io/github/brick-js/brick-hbs?branch=master)
 [![Dependency manager](https://david-dm.org/brick-js/brick-hbs.png)](https://david-dm.org/brick-js/brick-hbs)
 
 Handlebars Template Engine for [Brick.js][brk].
