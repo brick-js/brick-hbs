@@ -31,10 +31,13 @@ var Hbs = require('brick-hbs');
 
 var brk = brickJs({
     root: path.join(__dirname, 'modules'),
-    engine: Hbs.brick({
-        cache: false    // disabled by default, see below
-    })
 });
+
+var hbs = Hbs.brick({
+    cache: false    // disabled by default, see below
+})
+brk.engine('hbs', hbs);     // set hbs engine for .hbs file
+brk.engine('html', hbs);    // set hbs engine for .html file
 
 app.use('/', brk.express);
 ```
