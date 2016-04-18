@@ -14,26 +14,28 @@ Object.defineProperty(
 describe('extend tag', function() {
     var root = Path.resolve(__dirname, '../cases');
     var hbs = Hbs();
-    var ctx = {name: 'harttle'};
+    var ctx = {
+        name: 'harttle'
+    };
 
     it('should pass context to parent', function() {
-        return hbs.render(path('home.hbs'), ctx, render)
+        return hbs.render(path('home.hbs'), ctx, x => x, render)
             .should.eventually.equal('harttle\n<p>harttle</p>\n\n');
     });
     it('should pass hash context to parent', function() {
-        return hbs.render(path('account.hbs'), ctx, render)
+        return hbs.render(path('account.hbs'), ctx, x => x, render)
             .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
     it('should pass string hash context to parent', function() {
-        return hbs.render(path('about.hbs'), ctx, render)
+        return hbs.render(path('about.hbs'), ctx, x => x, render)
             .should.eventually.equal('harttle\n<p>harttle</p>\nharttle\n');
     });
-    function render(mid, ctx){
-        return hbs.render(path(`${mid}.hbs`), ctx, render);
+
+    function render(mid, ctx) {
+        return hbs.render(path(`${mid}.hbs`), ctx, x => x, render);
     }
 });
 
 function path(p) {
     return Path.resolve(__dirname, '../cases', p);
 }
-

@@ -26,7 +26,7 @@ function Brick(config) {
     this.cache = {};
 }
 
-Brick.prototype.render = function(tplPath, ctx, pctrl) {
+Brick.prototype.render = function(tplPath, ctx, pmodularize, pctrl) {
     ctx = ctx || {};
     if (typeof ctx !== 'object') {
         var msg = 'context is expected to be an object, encountered: ' + ctx;
@@ -35,6 +35,7 @@ Brick.prototype.render = function(tplPath, ctx, pctrl) {
     ctx.slug = new Slug(pctrl);
     return this.getTpl(tplPath)
         .then(tpl => link(tpl, ctx))
+        .then(pmodularize)
         .then(html => {
             var parent = ctx.slug.parent;
             if (parent) {
