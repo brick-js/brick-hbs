@@ -1,6 +1,6 @@
 {
   "name": "brick-hbs",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Handlebars Template Engine for Brick.js",
   "main": "index.js",
   "scripts": {
@@ -23,8 +23,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
-    "chai-as-promised": "^5.3.0"
+    "mocha": "^2.4.5"
   }
 }
