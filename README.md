@@ -30,15 +30,13 @@ npm install -S brick-hbs
 var brickJs = require('brick.js');
 var Hbs = require('brick-hbs');
 
-var brk = brickJs({
-    root: path.join(__dirname, 'modules'),
-});
+var brk = brickJs();
 
 var hbs = Hbs.brick({
     cache: false    // disabled by default, see below
 })
-brk.engine('hbs', hbs);     // set hbs engine for .hbs file
-brk.engine('html', hbs);    // set hbs engine for .html file
+brk.engine('.hbs', hbs);     // set hbs engine for .hbs file
+brk.engine('.html', hbs);    // set hbs engine for .html file
 
 app.use('/', brk.express);
 ```
@@ -47,13 +45,13 @@ app.use('/', brk.express);
 
 In Brick.js, partials are organized as modules. Eg:
 
-File `footer/index.hbs` in module `footer`:
+File `footer/view.hbs` in module `footer`:
 
 ```html
 <footer> Powered by Brick.js </footer>
 ```
 
-File `home/index.hbs` in module `home`:
+File `home/view.hbs` in module `home`:
 
 ```html
 <html>
@@ -79,7 +77,7 @@ The HTML for `home` page will be rendered as:
 
 Brick-hbs implemented async helper internaly, to support layout extend. Eg: 
 
-File `layout1/index.html` in module `layout1`:
+File `layout1/view.html` in module `layout1`:
 
 ```html
 <html>
@@ -92,7 +90,7 @@ File `layout1/index.html` in module `layout1`:
 
 > Use `{{block}}` for escaping.
 
-File `home/index.hbs` in module `home`:
+File `home/view.hbs` in module `home`:
 
 ```html
 {{extend 'layout1'}}
