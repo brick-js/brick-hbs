@@ -30,7 +30,9 @@ npm install -S brick-hbs
 var brickJs = require('brick.js');
 var Hbs = require('brick-hbs');
 
-var brk = brickJs();
+var brk = brickJs({
+    view: ['view.hbs', 'view.html']
+});
 
 var hbs = Hbs.brick({
     cache: false    // disabled by default, see below
